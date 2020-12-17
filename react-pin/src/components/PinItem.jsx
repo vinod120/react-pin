@@ -1,10 +1,15 @@
 import React from "react";
+import styles from './PinItem.module.css';
 
 const style = {
-    padding: 10,
-    width: 14,
-    fontSize: 14,
-    margin: 5
+    textAlign: 'center',
+    outline: 'none',
+    width: 75,
+    height: 40,
+    fontSize: 20,
+    margin: 10,
+    borderRadius: 5,
+    border: '1px solid #d3d3d3',
 }
 
 class PinItem extends React.Component {
@@ -38,23 +43,25 @@ class PinItem extends React.Component {
     }
 
     render() {
-        const { isTrue } = this.props;
+        const { isTrue, max_length } = this.props;
 
         const trueStyle = isTrue 
         ?  {
-                color: "green",
-                outline: "2px solid green",
-                border: 0
+            border: "1px solid rgb(249 2 189)",
+            color: "rgb(249 2 189)",
+            background: 'rgb(224 104 216 / 16%)',
+            opacity: 0.5,
             }
 
         :   {};
-            console.log( style )
+            // console.log( style )
         return(
             <input 
                 onKeyUp = { this.handleKeyUp }
                 style = { {...style, ...trueStyle} }
                 ref = {(n) => (this.input = n )}
-                maxLength = {1} />
+                maxLength = {max_length} 
+                className={styles.input}/>
         )
     }
 }

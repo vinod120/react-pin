@@ -5,7 +5,7 @@ import { PinItem } from "./PinItem"
 class Pin extends React.Component {
     constructor( props ){
         super( props );
-        this.value = new Array( props.len ).fill("");
+        this.value = new Array( props.length ).fill("");
         this.element = [];
         this.handleChange = this.handleChange.bind( this )
         this.handleBackspace = this.handleBackspace.bind( this )
@@ -13,15 +13,16 @@ class Pin extends React.Component {
 
     }
     handleChange( val, i ) {
-        const { len } = this.props;
+        const { input_length , length} = this.props;
         this.value[i] = val;
-        if( val.length > 0 && i < len - 1 ) {
+        if( val.length == input_length && i+1 < length ) {
             this.element[i + 1].focus();
         }
         this.props.onChange && this.props.onChange( this.value.join("") )
     }
 
     handleBackspace( i, val ) {
+        
         if( i > 0 ) {
             this.element[i - 1].focus();
         }
@@ -32,11 +33,13 @@ class Pin extends React.Component {
 
     handlePaste(e) {
         e.preventDefault();
+        const n = this.props.input_length
         let val = e.clipboardData
             .getData("Text")
-            .split("")
-            .filter((_, i) => i < this.props.len )
-
+            .match(new RegExp('.{1,' + n + '}', 'g'))
+            .filter((_, i) => i < this.props.input_length)
+        console.log(val)
+        console.log(this.props.length)
         val.forEach((itemVal, i) => {
             this.value[i] = itemVal;
             this.element[i].focus();
@@ -46,11 +49,12 @@ class Pin extends React.Component {
 
     }
     render() {
-        console.log( this.element );
-        const { isTrue } = this.props;
+
+    console.log(this.props.length)
+        // console.log( this.element );
+        const { isTrue, length , input_length} = this.props;
         return(
             <div onPaste = { this.handlePaste }>
-                <div>PIN</div>
                 {
                     this.value.map((item, i ) => (
                         <PinItem 
@@ -58,7 +62,8 @@ class Pin extends React.Component {
                             key = { i }
                             ref = { (n) => ( this.element[i] = n )}
                             onBackspace = { (e) => this.handleBackspace( i, e.target.value )}
-                            onChange = { (val) => this.handleChange( val, i ) } />
+                            onChange = { (val) => this.handleChange( val, i ) } 
+                            max_length = {input_length}/>
                     ))
                 }
             </div>
@@ -67,7 +72,7 @@ class Pin extends React.Component {
 }
 
 Pin.propTypes = {
-    len: PropTypes.number.isRequired
+    length: PropTypes.number.isRequired
 }
 
 

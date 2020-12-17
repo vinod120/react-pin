@@ -1,30 +1,50 @@
-import React from 'react';
+import React from 'react'
+import './App.css';
+import styles from './components/App.module.css'
+import ReactPinApp from './components/ReactPinApp';
 
-import { Pin } from './Pin'
-
-export default class ReactPinApp extends React.Component {
-  constructor( props ) {
-    super( props );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      pin: ""
-    } 
+      box_length: '',
+      input_length: '',
+      status: false
+    }
   }
-  render() {
-    const { pin } = this.state
+
+  handleClick = () => {
+    this.setState({
+      status: true
+    })
+  }
+
+  handleBoxesLength = (e) => {
+    this.setState({
+      box_length: e.target.value
+    })
+  }
+
+  handleInputLength = (e) => {
+    this.setState({
+      input_length: e.target.value
+    })
+  }
+
+  render(){
+    const {box_length, input_length, status} = this.state
     return (
-     <div className="App">
-        <h1>REACT INPUT</h1>
-        <Pin 
-            len = {5}
-            isTrue = { pin === "12345" }
-            onChange = { (val) => this.setState({ pin : val })}
-        />
-
-        <h3> PIN: { this.state.pin } </h3>
-        
-     </div>
-      
-    )
+      <div className="App" style={{marginTop: 50}}>
+        <input type="number" onChange={this.handleBoxesLength} placeholder="Total Boxes" value={box_length} className={styles.input}/>
+        <input type="number" onChange={this.handleInputLength} placeholder="Each Input box length" value={input_length} className={styles.input}/>
+        <button onClick={this.handleClick} className={styles.button}>GET</button>
+        {
+          status ? 
+          <ReactPinApp box_length={box_length} input_length={input_length}/>
+          :
+          null
+        }
+      </div>
+    );
   }
-
 }
