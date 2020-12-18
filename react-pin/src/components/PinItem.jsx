@@ -27,6 +27,7 @@ class PinItem extends React.Component {
 
     onChange(e) {
         this.props.onChange( e.target.value );
+        console.log(e.target.value)
     }
 
     handleKeyUp( e ) {
@@ -40,6 +41,7 @@ class PinItem extends React.Component {
 
     setValue( val ) {
         this.input.value = val;
+        console.log(val)
     }
 
     render() {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pin } from '../components/Pin';
 import styled from 'styled-components';
+import DisplayCardNumber from './DisplayCardNumber';
 
 const Heading = styled.span`
   color:#9e9e9e;
@@ -24,35 +25,46 @@ export default class ReactPinApp extends React.Component {
     super( props );
     this.state = {
       pin: "",
-      status: false
+      status: false,
+      arr: []
     } 
   }
 
   handleSubmit = () => {
     this.setState({
-      status: true
+      status: true,
+      arr: [...this.state.arr, this.state.pin.match(new RegExp('.{1,' + this.props.input_length + '}', 'g'))]
     })
+    console.log(this.state.pin)
+    console.log(this.state.arr)
+    // this.state.arr = this.state.arr.push(this.state.pin)
+    
   }
 
-  handleDelete = (i) => {
-    const arr = this.state.pin.match(new RegExp('.{1,' + Number(this.props.input_length) + '}', 'g'))
-    console.log(arr[i])
-    // console.log(arr.slice(i).join(''))
+  handleDelete = (i)=> {
+    console.log(this.state.arr[i])
+    let temp = this.state.arr.splice(i, 1)
+    console.log(temp)
     this.setState({
-      pin: arr.slice(i).join('')
+      arr: [...this.state.arr]
     })
   }
-
   render() {
-    const { pin } = this.state
+    const { pin, status, arr } = this.state
     const {box_length, input_length} = this.props
     const max_length = Number(box_length) * Number(input_length)
-    console.log(this.props)
-    console.log("max length", max_length)
-    const arr = pin.match(new RegExp('.{1,' + Number(input_length) + '}', 'g'))
+    // console.log(this.props)
+    // console.log("max length", max_length)
+    // if(pin.length == max_length){
+      
+    //     this.state.arr = [...this.state.arr, pin]
+
+    // }
+    console.log(this.state.arr)
     return (
-     <div className="App">
-       <Container>
+      <>
+      <div className="App">
+        <Container>
         <Heading style={{color: pin.length == max_length ? "rgb(249 2 189)": '#9e9e9e'}}>Card Number*</Heading>
           <Pin 
               length = {Number(box_length)}
@@ -60,33 +72,34 @@ export default class ReactPinApp extends React.Component {
               isTrue = { pin.length == max_length }
               onChange = { (val) => this.setState({ pin : val })}
           />
-          <div style={{marginTop:10}}>
-            {
-              pin.length == max_length ? <button onClick={this.handleSubmit}>SUBMIT</button> : null
-            }
-          </div>
+        </Container>    
+      </div>
+      <div>
+        {
+          (pin.length == max_length) ? <button onClick={this.handleSubmit}>ADD</button> : null
+        }
+      </div>
+      <div>
+        {
+          status ? 
           <div>
-            {
-              // list = pin.match(new RegExp('.{1,' + Number(input_length) + '}', 'g')),
-              // console.log(pin.match(new RegExp('.{1,' + Number(input_length) + '}', 'g'))),
-              console.log(arr),
-              this.state.status ? 
-              <div>
-                {arr && arr.map((item, i)=>{
+              {
+                arr.map((item, i)=>{
                   return (
-                    <div style={{marginTop:10}}>
-                      <span style={{marginRight: 10}}>{item}</span> <button onClick={()=>this.handleDelete(i)}>Delelte</button>
-                    </div>
+                    <>
+                      <div key={i}>
+                        <span>{item}</span><button onClick={()=>this.handleDelete(i)}>Delete</button>
+                      </div>
+                    </>
                   )
-                })}
-              </div>
-              :
-              null
-            }
+                })
+              }
           </div>
-       </Container>     
-     </div>
-      
+          :
+          null
+        }
+      </div>
+    </>
     )
   }
 }

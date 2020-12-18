@@ -5,29 +5,29 @@ import { PinItem } from "./PinItem"
 class Pin extends React.Component {
     constructor( props ){
         super( props );
-        this.value = new Array( props.length ).fill("");
-        this.element = [];
-        this.handleChange = this.handleChange.bind( this )
-        this.handleBackspace = this.handleBackspace.bind( this )
-        this.handlePaste = this.handlePaste.bind( this )
-
+        this.state = {
+            value: new Array( props.length ).fill(""),
+            element: [],
+            status: false
+        }
     }
     handleChange( val, i ) {
         const { input_length , length} = this.props;
-        this.value[i] = val;
+        this.state.value[i] = val;
+        console.log(val)
         if( val.length == input_length && i+1 < length ) {
-            this.element[i + 1].focus();
+            this.state.element[i + 1].focus();
         }
-        this.props.onChange && this.props.onChange( this.value.join("") )
+        this.props.onChange && this.props.onChange( this.state.value.join("") )
     }
 
     handleBackspace( i, val ) {
         
         if( i > 0 ) {
-            this.element[i - 1].focus();
+            this.state.element[i - 1].focus();
         }
-        this.value[i] = val;
-        this.props.onChange && this.props.onChange( this.value.join("") )
+        this.state.value[i] = val;
+        this.props.onChange && this.props.onChange( this.state.value.join("") )
 
     }
 
@@ -41,32 +41,45 @@ class Pin extends React.Component {
         console.log(val)
         console.log(this.props.length)
         val.forEach((itemVal, i) => {
-            this.value[i] = itemVal;
-            this.element[i].focus();
-            this.element[i].setValue(itemVal)
+            this.state.value[i] = itemVal;
+            this.state.element[i].focus();
+            this.state.element[i].setValue(itemVal)
         })
-        this.props.onChange && this.props.onChange( this.value.join("") )
+        this.props.onChange && this.props.onChange( this.state.value.join("") )
 
     }
+
+    hanldleSubmit = (e) => {
+        this.setState({
+            status: true
+        })
+        console.log(this.state.status)
+    }
+
     render() {
 
-    console.log(this.props.length)
+    // console.log(this.props.length)
         // console.log( this.element );
         const { isTrue, length , input_length} = this.props;
+        const { value , element, status} = this.state
+        console.log(value)
         return(
+            <>
             <div onPaste = { this.handlePaste }>
                 {
-                    this.value.map((item, i ) => (
+                    value && value.map((item, i ) => (
                         <PinItem 
                             isTrue = { isTrue }
                             key = { i }
-                            ref = { (n) => ( this.element[i] = n )}
+                            ref = { (n) => ( element[i] = n )}
                             onBackspace = { (e) => this.handleBackspace( i, e.target.value )}
-                            onChange = { (val) => this.handleChange( val, i ) } 
-                            max_length = {input_length}/>
+                            onChange = { (val) => this.handleChange( val, i ) }
+                            max_length = {input_length}
+                        />
                     ))
                 }
             </div>
+        </>
         )
     }
 }
