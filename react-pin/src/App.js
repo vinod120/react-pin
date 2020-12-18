@@ -31,18 +31,18 @@ export default class App extends React.Component {
     })
   }
 
-  render(){
-    const {box_length, input_length, status} = this.state
+  render() {
+    const { box_length, input_length, status } = this.state
     return (
-      <div className="App" style={{marginTop: 50}}>
-        <input type="number" onChange={this.handleBoxesLength} placeholder="Total Boxes" value={box_length} className={styles.input}/>
-        <input type="number" onChange={this.handleInputLength} placeholder="Each Input box length" value={input_length} className={styles.input}/>
+      <div className="App" style={{ marginTop: 50 }}>
+        <input type="number" onChange={this.handleBoxesLength} placeholder="Total Boxes" value={box_length} className={styles.input} />
+        <input type="number" onChange={this.handleInputLength} placeholder="Each Input box length" value={input_length} className={styles.input} />
         <button onClick={this.handleClick} className={styles.button}>GET</button>
         {
-          status ? 
-          <ReactPinApp box_length={box_length} input_length={input_length}/>
-          :
-          null
+          status ?
+            <ReactPinApp box_length={box_length} input_length={input_length} />
+            :
+            null
         }
       </div>
     );
