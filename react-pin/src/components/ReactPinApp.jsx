@@ -88,7 +88,7 @@ export default class ReactPinApp extends React.Component {
                   return (
                     <>
                       <div key={i}>
-                        <span>{item}</span><button onClick={()=>this.handleDelete(i)}>Delete</button>
+                        <span style={{marginRight: "2%"}}>{item.join('-')}</span><button onClick={()=>this.handleDelete(i)}>Delete</button>
                       </div>
                     </>
                   )
